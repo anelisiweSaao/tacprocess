@@ -64,7 +64,7 @@ class Navigation extends React.Component {
 
     return(
       <div>
-        <ul className="nav">
+      <ul className="topNav">
           <li><Link to="/">Home</Link></li>
           <li><Link to="/techreview">Tech Review</Link></li>
           <li><Link to="/statistics">Statistics</Link></li>
@@ -73,7 +73,13 @@ class Navigation extends React.Component {
           <li className="active"><Link to="/admin">Admin</Link></li>
           <button className="logoutbtn"
           onClick={() => this.props.dispatch(actions.logout())}> Logout</button>
+      </ul>
+        <ul className="nav">
+           <div>
+           <h1><b>TIME ALLOCATION COMMIT</b></h1>
+           </div>
         </ul>
+
         <div className="selector-div">
           <div className="left">
             <h2>Semesters</h2>

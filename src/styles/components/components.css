@@ -12,18 +12,25 @@
 .nav {
     list-style-type: none;
     overflow: hidden;
-    background-color: #6495ED;
-    background-image:url("pictures/logo-alt.png");
+    //background-color: #4682B4;
+    background-image:url("pictures/logo-alt.png"), url("pictures/pic.jpg");
     background-repeat: no-repeat;
     background-position: right top;
     background-attachment: fixed;
-    background-size: 30% 30%;
+    background-size: 20% 40%, cover;
+    background-origin: content-box;
     display: block;
-    width: 100%;
-    fixed: top;
-    font-size:10px;
-    height:200px;
-    color:white;
+    font-size: 20px;
+    height:150px;
+    color: white;
+    text-align: center;
+    text-shadow:1px 1px 0px #37a69b;
+    border-width:300px;
+    border-left: 6px;
+    padding: 0;
+}
+h1{
+  text-align: bottom;
 }
 
 li {
@@ -43,6 +50,7 @@ li a:hover:not(.active) {
     background-color: #111;
 }
 -->
+
 .active {
     background-color:#90EE90;
 }
@@ -87,5 +95,5 @@ li a:hover:not(.active) {
     border: 3px solid #f73b63;
 }
 .root-main{
-  padding: 5px 150px 150px 150px;
+  padding: 5px 0px 150px 0px;
 }
