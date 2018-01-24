@@ -172,13 +172,13 @@ export function partners(user) {
  */
 export function hasRole(user, role, partner) {
     if (role === types.ADMINISTRATOR || role === types.SALT_ASTRONOMER) {
-        return (user.roles || []).some(r => r.role === role);
+        return (user.roles || []).some(r => r.type === role);
     } else {
-        return (user.roles || []).some(r => r.role === role && (r.partners || []).includes(partner));
+        return (user.roles || []).some(r => r.type === role && (r.partners || []).includes(partner));
     }
 }
 
-export function canDo(user, action, partner) {
+export function canDo(user, action, partner, proposal) {
     switch (action) {
     case types.VIEW_TIME_ALLOCATION_PAGE:
         return hasRole(user, types.TAC_MEMBER, partner) ||
@@ -187,8 +187,19 @@ export function canDo(user, action, partner) {
     case types.EDIT_TIME_ALLOCATION_PAGE:
         return hasRole(user, types.TAC_CHAIR, partner) ||
                 hasRole(user, types.ADMINISTRATOR);
+    case types.CHANGE_LIAISON:
+        return hasRole(user, types.ADMINISTRATOR);
+    case types.SELF_ASSIGN_TO_PROPOSAL:
+        return hasRole(user, types.SALT_ASTRONOMER);
     default:
         return false;
+    }
+}
+
+// This utility method checks if a proposal has assigned an Astronomer or not
+export const astronomerAssigned = (proposal) => {
+    if(!proposal.SALTAstronomer){
+      return true;
     }
 }
 
@@ -272,4 +283,47 @@ export function areAllocatedTimesCorrect(partner, availableTime, proposals){
      p3: allocTotals.p3 <= availableTime.p3*60*60,
    }
 
+}
+
+export function updateLiaisonAstronomerForProposal (proposals, proposalToUpdate, liaisonUsername){
+  const updated = (proposals || []).map(p => {
+
+    if ( p.proposalCode === proposalToUpdate ){
+       p.liaisonAstronomer = liaisonUsername
+    }
+    return p
+  })
+  return updated
+}
+
+export function updateTechnicalCommentForProposal(proposals, proposalToUpdate, techReport){
+  console.log(techReport);
+  const updated = (proposals || []).map(p => {
+
+    if ( p.proposalCode === proposalToUpdate ){
+       p.techReport = techReport
+    }
+    return p
+  })
+  return updated
+}
+
+export function getLiaisonName(username, SALTAstronomers){
+  let name
+  (SALTAstronomers || []).forEach( sa => {
+    if (sa.username === username){
+      name = sa.name
+    }
+  })
+  return name
+}
+
+export function getLiaisonUsername(name, SALTAstronomers){
+  let username
+  (SALTAstronomers || []).forEach( sa => {
+    if (sa.name === name){
+      username = sa.username
+    }
+  })
+  return username
 }
