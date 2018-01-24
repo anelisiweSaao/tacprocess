@@ -1,6 +1,3 @@
-
-
-
 export default function PartnerProposals(proposalList, partners){
   /**
    *
@@ -27,7 +24,5 @@ export default function PartnerProposals(proposalList, partners){
        }
      })
    })
-
    return proposalPerPartner
-
 }

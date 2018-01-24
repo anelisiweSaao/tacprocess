@@ -59,6 +59,9 @@ export function queryStatData(semester, partner){
         name
         surname
       }
+      SALTAstronomer{
+        username
+      }
       allocatedTime{
         partnerCode
         p0
@@ -206,6 +209,12 @@ export function queryProposals(semester, partner){
         name
         surname
       }
+      SALTAstronomer{
+        name
+        username
+        surname
+        email
+      }
       allocatedTime{
         partnerCode
         p0
@@ -231,7 +240,19 @@ export function queryProposals(semester, partner){
 
 export function submitAllocations(query){
   return jsonClient().post(`/graphql`, { query })
-  .then(
-    response => response
-  )
+  .then(response => response)
+}
+
+export function querySALTAstronomers(){
+  const query=`
+  {
+    SALTAstronomers{
+      name
+      username
+      surname
+    }
+  }
+  `
+  return graphqlClient().post(`/graphql?query=${query}`)
+  .then(response => response)
 }

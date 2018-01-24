@@ -11,7 +11,7 @@ import { submitAllocations } from "../../api/graphQL";
 import { updateProposals } from "../../actions/proposalsActions";
 import { startSubmition, passSubmition, failSubmition } from "../../actions/timeAllocationActions";
 import { ALL_PARTNER } from "../../types";
-import { getPartnerList } from "../../util/filters";
+import { getPartnerList, listForDropdown } from "../../util/filters";
 
 
 class TimeAllocationPage extends React.Component {
@@ -22,11 +22,12 @@ class TimeAllocationPage extends React.Component {
   }
 
   submitProposals(event, partner){
-    const ppp = PartnerProposals(this.props.proposals.proposals, this.props.user.user.partners);
-    const { dispatch } = this.props
+    const {proposals, user, dispatch, filters } = this.props
+    const ppp = PartnerProposals(proposals.proposals, listForDropdown(getPartnerList(user.user.roles)));
+
     const query = getQuaryToAddAllocation(ppp[partner],
       partner,
-      this.props.filters.selectedSemester
+      filters.selectedSemester
     )
     dispatch(startSubmition(partner))
     submitAllocations(query).then(p => p.data, dispatch(failSubmition()))
@@ -64,7 +65,7 @@ class TimeAllocationPage extends React.Component {
 
     const { allocatedTime, filters, user, tac} = this.props
     const  proposals  = this.props.proposals.proposals || []
-    let  partners  = getPartnerList(this.props.user.user.roles || [])
+    let  partners  = listForDropdown(getPartnerList(this.props.user.user.roles || []))
 
     if (filters.selectedPartner !== ALL_PARTNER){
       partners = filters.selectedPartner ? [{value: filters.selectedPartner, label: filters.selectedPartner}] : []
@@ -74,22 +75,21 @@ class TimeAllocationPage extends React.Component {
       <div>
       {
         tac.submiting ? (<div><h1>Submiting...</h1></div>) : partners.map( part => (
-          <div>
+          <div key={part.value}>
             <AvailableTimePerPartnerTable
-              key={ part.value + 1 }
               proposals = { ppp[part.value] || [] }
               partner = { part.value }
               availableTime = {allocatedTime}
              />
             <ProposalsPerPartner
-                  key={ part.value }
+
                   proposals={ ppp[part.value] || [] }
                   partner={part.value}
                   tacCommentChange={ this.tacCommentChange.bind(this) }
                   allocationChange={ this.allocationChange.bind(this) }
                   submitForParner={ this.submitProposals.bind(this) }
-                  canAllocate = { canUserWriteAllocations(user.user, part.value) }
-                  canComment = { canUserWriteTechComments(user.user, part.value) }
+                  canAllocate = { canUserWriteAllocations(user.user, part.value) || false }
+                  canComment = { canUserWriteTechComments(user.user, part.value) || false }
                   submited = { tac }
               />
             </div>
