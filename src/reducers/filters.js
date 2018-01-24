@@ -49,7 +49,7 @@ export default function selectors(state=initialState, action={}) {
       case PAGE_CHANGE: {
         return {
           ...state,
-          currentPage: action.filters,
+          currentPage: action.current,
         }
       }
       case SEMESTER_CHANGE: {
@@ -61,7 +61,7 @@ export default function selectors(state=initialState, action={}) {
       case PARTNER_CHANGE: {
         return {
           ...state,
-          selectedPartner: action.filters,
+          selectedPartner: action.changeTo,
         }
       }
       default:{
